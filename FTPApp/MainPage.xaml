@@ -1,0 +1,26 @@
+﻿<Page
+    x:Class="FTPApp.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:FTPApp"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <TextBox x:Name="textBoxAddress" HorizontalAlignment="Left" Margin="21,0,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="355" PlaceholderText="server address"/>
+        <TextBox x:Name="textBoxUserName" HorizontalAlignment="Left" Margin="21,44,0,0" TextWrapping="Wrap" Text="" PlaceholderText="username" VerticalAlignment="Top" Width="173"/>
+        <TextBox x:Name="textBoxPassword" HorizontalAlignment="Left" Margin="198,44,0,0" TextWrapping="Wrap" Text="" PlaceholderText="password" VerticalAlignment="Top" RenderTransformOrigin="-2.473,1.839" Width="178"/>
+        <Button x:Name="buttonConnect"  HorizontalAlignment="Left" Margin="31,120,0,0" VerticalAlignment="Top" Click="onConnectClick" Content="Connect"/>
+        <ScrollViewer HorizontalAlignment="Left" Height="433" Margin="31,186,0,0" VerticalAlignment="Top" Width="345" VerticalScrollMode="Enabled" HorizontalScrollMode="Disabled">
+            <TextBlock x:Name="textBlock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Height="433" Width="346" />
+        </ScrollViewer>
+        <Button x:Name="buttonDownload" Content="Download" HorizontalAlignment="Left" Margin="267,120,0,0" VerticalAlignment="Top" Click="onDownloadClick" IsEnabled="False"/>
+        <ComboBox x:Name="comboBox" HorizontalAlignment="Left" Margin="211.109,77.036,0,0" VerticalAlignment="Top" Width="165.258" RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" d:LayoutRounding="Auto" IsEnabled="False">
+
+        </ComboBox>
+
+
+    </Grid>
+</Page>
