@@ -5,18 +5,21 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
 using Windows.Storage.Pickers;
+using Windows.Storage.Streams;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 
@@ -122,28 +125,39 @@ namespace FTPApp
                 return;
             }
 
-            String lImageName = comboBox.SelectedItem.ToString();
-            textBlock.Text += "\nStart dowloading " + lImageName;
-            FtpResponse lResponse = await ftp.GetFile(lImageName);
-           // if (!lResponse.Code.Equals(FtpConstants.CODE_TRANSFER_START) &&
-           //     !lResponse.Code.Equals(FtpConstants.CODE_TRANSFER_COMPLETE))
-           // {
-           //     textBlock.Text += "\n " + lResponse.Message;
-           //     return;
-           // }
-            textBlock.Text += "\nDownload completed: " + lImageName;
+            String lFileName = comboBox.SelectedItem.ToString();
+            textBlock.Text += "\nStart dowloading " + lFileName;
+            FtpFileResponse lResponse = await ftp.GetFile(lFileName);
+           
+            textBlock.Text += "\nDownload completed: " + lFileName;
 
             StorageFolder lFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
-            StorageFile lFileDonloaded = await lFolder.CreateFileAsync(lImageName.ToString(), CreationCollisionOption.ReplaceExisting);
-            await FileIO.WriteBytesAsync(lFileDonloaded, GetBytes(lResponse.Message));
-            textBlock.Text += "\nFile saved to:+ " + lFileDonloaded.Path;
+            StorageFile lFileDownloaded = await lFolder.CreateFileAsync(lFileName.ToString(), CreationCollisionOption.ReplaceExisting);
+            await FileIO.WriteBytesAsync(lFileDownloaded, lResponse.mBytes);
+            textBlock.Text += "\nFile saved to:+ " + lFileDownloaded.Path;
+
+            try
+            {
+                //if image file was downloaded, try to display it in image widget
+                BitmapImage img = new BitmapImage();
+                img = await LoadImage(lFileDownloaded);
+                image.Source = img;
+            }
+            catch
+            {
+                textBlock.Text += "\nnot image file";
+            }
         }
 
-        static byte[] GetBytes(string str)
+        private static async Task<BitmapImage> LoadImage(StorageFile file)
         {
-            byte[] bytes = new byte[str.Length * sizeof(char)];
-            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
-            return bytes;
+            BitmapImage bitmapImage = new BitmapImage();
+            FileRandomAccessStream stream = (FileRandomAccessStream)await file.OpenAsync(FileAccessMode.Read);
+
+            bitmapImage.SetSource(stream);
+
+            return bitmapImage;
+
         }
 
 
