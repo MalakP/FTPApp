@@ -1,2 +1,2 @@
 # FTPApp
-Demo application; communicating with FTP server
+Windows Phone 8.1 Demo application; communicating with FTP server
