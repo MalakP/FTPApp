@@ -65,6 +65,7 @@ namespace FTPApp
         private async void onConnectClick(object sender, RoutedEventArgs e)
         {
             textBlock.Text = "Connect clicked";
+            //Save login information
             saveConnectionData();
             ftp = new FtpClient(textBoxAddress.Text, "21", textBoxUserName.Text, textBoxPassword.Text);
 
@@ -108,6 +109,7 @@ namespace FTPApp
                 textBoxPassword.Text = settings.Values["password"].ToString();
             }
         }
+        //Filling combo box with file names received
         private void filloutCombo(string pNamesString)
         {
             string[] lNames = pNamesString.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
@@ -136,30 +138,7 @@ namespace FTPApp
             await FileIO.WriteBytesAsync(lFileDownloaded, lResponse.mBytes);
             textBlock.Text += "\nFile saved to:+ " + lFileDownloaded.Path;
 
-            try
-            {
-                //if image file was downloaded, try to display it in image widget
-                BitmapImage img = new BitmapImage();
-                img = await LoadImage(lFileDownloaded);
-                image.Source = img;
-            }
-            catch
-            {
-                textBlock.Text += "\nnot image file";
-            }
         }
-
-        private static async Task<BitmapImage> LoadImage(StorageFile file)
-        {
-            BitmapImage bitmapImage = new BitmapImage();
-            FileRandomAccessStream stream = (FileRandomAccessStream)await file.OpenAsync(FileAccessMode.Read);
-
-            bitmapImage.SetSource(stream);
-
-            return bitmapImage;
-
-        }
-
 
     }
 }
